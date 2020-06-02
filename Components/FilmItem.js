@@ -36,7 +36,7 @@ class FilmItem extends React.Component {
 
 const styles = StyleSheet.create({
   main_container: {
-    height: 190,
+    height: 191,
     flexDirection: "row",
   },
 
