@@ -2,15 +2,16 @@
 
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
+import {getImageFromApi} from '../API/TMBDApi';
 
 class FilmItem extends React.Component {
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const film = this.props.film;
     return (
       <View style={styles.main_container}>
         <View style={styles.image_container}>
-          <Image style={styles.image} source={{ uri: "image" }} />
+          <Image style={styles.image} source={{ uri: getImageFromApi(film.poster_path) }} />
         </View>
 
         <View style={styles.content_container}>
@@ -43,8 +44,7 @@ const styles = StyleSheet.create({
   image: {
     width: 120,
     height: 180,
-    margin: 5,
-    backgroundColor: "#999",
+    margin: 5
   },
   content_container: {
     flexDirection: "column",
