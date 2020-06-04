@@ -1,3 +1,5 @@
+// Components/Search.js
+
 import React from 'react';
 import {
     StyleSheet, View, TextInput, Button, Text, FlatList, ActivityIndicator
@@ -18,7 +20,12 @@ class Search extends React.Component {
         };
     }
 
-    // METHODES STATE 
+    // NAVIGATION
+    _displayDetailForFilm = (idFilm) => {
+        console.log("Display film with id : " + idFilm);
+    }
+
+    // STATE 
     _searchFilms() {
         this.page = 0
         this.totalPages = 0
@@ -68,16 +75,18 @@ class Search extends React.Component {
         console.log("Is loading : " + this.state.isLoading)
         return(
             <View style={{marginTop:20}}>
-                <TextInput style = {styles.textinput} 
-                placeholder="Titre du film" 
-                onChangeText={(text) => this._searchTextInputChanged(text)}
-                onSubmitEditing= {() => this._searchFilms()}
+                <TextInput 
+                    style = {styles.textinput} 
+                    placeholder="Titre du film" 
+                    onChangeText={(text) => this._searchTextInputChanged(text)}
+                    onSubmitEditing= {() => this._searchFilms()}
                 />
                 <Button title="Rechercher" onPress={() => this._searchFilms()}/>
                 <FlatList 
                     data = {this.state.films}
                     keyExtractor = {(item) => item.id.toString()}
-                    renderItem = {({item}) => <FilmItem film={item}/>}
+                    renderItem = {({item}) => <FilmItem film={item} 
+                        displayDetailForFilm = {this._displayDetailForFilm}/>}
                     onEndReachedThreshold = {0.5}
                     onEndReached = {() => {
                         console.log("onReachedEnd !")
@@ -94,7 +103,6 @@ class Search extends React.Component {
 const styles = StyleSheet.create({
     main_container: {
         flex: 1,
-        marginTop: 20
     },
     textinput: {
         marginLeft: 5,
