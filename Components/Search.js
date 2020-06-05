@@ -23,13 +23,14 @@ class Search extends React.Component {
     // NAVIGATION
     _displayDetailForFilm = (idFilm) => {
         console.log("Display film with id : " + idFilm);
+        this.props.navigation.navigate('Détails du Film', {idFilm : idFilm});
     }
 
     // STATE 
     _searchFilms() {
         this.page = 0
         this.totalPages = 0
-        this.setState(
+        this.setState (
             {films: []},
             () => {
                 console.log("Page : " + this.page + "\n" + "Pages Totales : " 
@@ -71,6 +72,7 @@ class Search extends React.Component {
     }
     // RENDER
     render() {
+        console.log(this.props.navigation);
         console.log("RENDER");
         console.log("Is loading : " + this.state.isLoading)
         return(
