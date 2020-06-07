@@ -48,7 +48,6 @@ class Search extends React.Component {
                 // console.log(data);
                 this.page = data.page
                 this.totalPages = data.total_pages
-                this.setState({});
                 this.setState(
                 {
                     films: this.state.films.concat(data.results),
@@ -88,7 +87,7 @@ class Search extends React.Component {
                     data = {this.state.films}
                     keyExtractor = {(item) => item.id.toString()}
                     renderItem = {({item}) => <FilmItem film={item} 
-                        displayDetailForFilm = {this._displayDetailForFilm}/>}
+                        displayDetailForFilm = {this._displayDetailForFilm} />}
                     onEndReachedThreshold = {0.5}
                     onEndReached = {() => {
                         console.log("onReachedEnd !")
