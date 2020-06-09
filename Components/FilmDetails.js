@@ -4,8 +4,9 @@ import React from 'react'
 import {StyleSheet, View, ActivityIndicator, Text, ScrollView, Image} from 'react-native'
 import { getFilmDetailsFromApi, getImageFromApi } from '../API/TMBDApi'
 import { FlatList, SectionList } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
-export default class FilmDetail extends React.Component {
+class FilmDetails extends React.Component {
     // CONSTRUCTEUR ET METHODES SURCHARGES
     constructor(props) {
         super(props);
@@ -88,6 +89,7 @@ export default class FilmDetail extends React.Component {
     // RENDER
     render() {
         console.log("Render");
+        console.log(this.props);
         return (
             <View style = {styles.main_container}>
                 {this._displayLoading()}
@@ -96,7 +98,7 @@ export default class FilmDetail extends React.Component {
         )
     }
 }
-
+// STYLES 
 const styles = StyleSheet.create({
     main_container: {
         flex: 1
@@ -117,12 +119,14 @@ const styles = StyleSheet.create({
     header_container: {
     }
     ,image : {
-        height : 150
+        height : 150,
+        margin: 5
     },
 
     content_container: {
         marginTop: 20,
         marginBottom: 20
+        
     },
     title : {
         fontSize : 28,
@@ -130,11 +134,17 @@ const styles = StyleSheet.create({
         textAlign : 'center',
         marginBottom: 10
     },
-
+    overview_text: {
+        paddingLeft: 5
+    },
     details_text : {
-        fontWeight : 'bold'
+        fontWeight : 'bold',
+        paddingLeft: 5 
     }
+});
 
-    
-
-})
+// REDUX
+const mapStateToProps = (state) => {
+    return state
+}
+export default connect(mapStateToProps)(FilmDetails);

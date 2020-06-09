@@ -44,7 +44,7 @@ class Search extends React.Component {
         console.log(text);
         this.setState({isLoading: true});
         if (this.state.searchedText.length > 0) {
-            getFilmsFromApiWithSearchedText(text, this.page + 1).then(data => {
+            getFilmsFromApiWithSearchedText(text, this.page + 1).then((data) => {
                 // console.log(data);
                 this.page = data.page
                 this.totalPages = data.total_pages
@@ -102,10 +102,12 @@ class Search extends React.Component {
 
 // STYLES
 const styles = StyleSheet.create({
-    main_container: {
+    main_container: 
+    {
         flex: 1,
     },
-    textinput: {
+    textinput: 
+    {
         marginLeft: 5,
         marginRight: 5,
         height: 50,
@@ -114,7 +116,8 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         backgroundColor: '#f0f0f0',
     },
-    loading_container: {
+    loading_container: 
+    {
         position: 'absolute',
         left: 0,
         right: 0,
