@@ -6,6 +6,8 @@ import {
 } from 'react-native';
 import FilmItem from './FilmItem'
 import {getFilmsFromApiWithSearchedText} from '../API/TMBDApi'
+import { connect } from 'react-redux';
+
 
 class Search extends React.Component {
 
@@ -19,7 +21,9 @@ class Search extends React.Component {
             isLoading: false,
         };
     }
-
+    componentDidMount() {
+        console.log("Props:" + this.props);
+    }
     // NAVIGATION
     _displayDetailForFilm = (idFilm) => {
         console.log("Display film with id : " + idFilm);
@@ -41,7 +45,7 @@ class Search extends React.Component {
     }
     _loadFilms() {
         let text = this.state.searchedText;
-        console.log(text);
+        console.log("Searched Text: " + text);
         this.setState({isLoading: true});
         if (this.state.searchedText.length > 0) {
             getFilmsFromApiWithSearchedText(text, this.page + 1).then((data) => {
@@ -69,11 +73,19 @@ class Search extends React.Component {
             )
         }
     }
+
+    // STATE REDUX
+    _isFavorite(item) {
+        let isFavorite = 
+        (this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false;
+        return isFavorite
+    }
     // RENDER
     render() {
-        console.log(this.props.navigation);
+        // console.log(this.props.navigation);
         console.log("RENDER");
         console.log("Is loading : " + this.state.isLoading)
+        console.log("State:" + this.state);
         return(
             <View style={{marginTop:20}}>
                 <TextInput 
@@ -85,9 +97,14 @@ class Search extends React.Component {
                 <Button title="Rechercher" onPress={() => this._searchFilms()}/>
                 <FlatList 
                     data = {this.state.films}
+                    extraDate = {this.props.favoritesFilm}
                     keyExtractor = {(item) => item.id.toString()}
-                    renderItem = {({item}) => <FilmItem film={item} 
-                        displayDetailForFilm = {this._displayDetailForFilm} />}
+                    renderItem = {
+                        ({item}) => 
+                        <FilmItem film={item} 
+                        displayDetailForFilm = {this._displayDetailForFilm}
+                        isFavorite = {this._isFavorite(item)} />
+                    }
                     onEndReachedThreshold = {0.5}
                     onEndReached = {() => {
                         console.log("onReachedEnd !")
@@ -127,5 +144,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     }
 })
+// REDUX
+const mapStateToProps = (state) => {
+    return {
+        favoritesFilm: state.favoritesFilm
+    }
+}
+export default connect(mapStateToProps)(Search);
 
-export default Search;

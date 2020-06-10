@@ -6,6 +6,17 @@ import {getImageFromApi} from '../API/TMBDApi';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 class FilmItem extends React.Component {
+  _displayFavoriteImages() {
+	  	const {isFavorite} = this.props;
+		if (isFavorite) {
+			return (
+				<Image 
+					source = {require("../Images/ic_favorite.png")} 
+					style = {styles.favorite_image}
+				/>
+			);		
+		}
+  }
   render() {
     // console.log(this.props);
 	const {film, displayDetailForFilm} = this.props;
@@ -20,6 +31,7 @@ class FilmItem extends React.Component {
 
 			<View style={styles.content_container}>
 				<View style={styles.header_container}>
+					{this._displayFavoriteImages()}
 					<Text style={styles.title_text}>{film.title}</Text>
 					<Text style={styles.vote_text}>{film.vote_average}</Text>
 				</View>
@@ -89,6 +101,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "right",
   },
+  favorite_image: {
+	width: 25,
+	height: 25,
+	marginRight: 5
+	}
 });
 
 export default FilmItem;

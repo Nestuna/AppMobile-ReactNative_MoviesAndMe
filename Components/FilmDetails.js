@@ -1,9 +1,9 @@
 // Components/FilmDetails.js
 
 import React from 'react'
-import {StyleSheet, View, ActivityIndicator, Text, ScrollView, Image} from 'react-native'
+import {StyleSheet, View, ActivityIndicator, Text, ScrollView, Image, Button} from 'react-native'
 import { getFilmDetailsFromApi, getImageFromApi } from '../API/TMBDApi'
-import { FlatList, SectionList } from 'react-native-gesture-handler';
+import { FlatList, SectionList, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 
 class FilmDetails extends React.Component {
@@ -28,6 +28,10 @@ class FilmDetails extends React.Component {
             );
         });
     }
+    componentDidUpdate() {
+        console.log("componentDidUpdate : ");
+        // console.log(this.props.favoritesFilm);
+    }
     
     // FONCTIONS
     _displayLoading() {
@@ -39,6 +43,16 @@ class FilmDetails extends React.Component {
                 </View>
             );
         }
+    }
+    _toggleFavorite() {
+        const action = { type : 'TOGGLE_FAVORITE', value : this.state.film };
+        this.props.dispatch(action);
+    }
+    _displayFavoriteImages() {
+        var sourceImage = require ("../Images/ic_favorite_border.png");
+        const filmIndex = this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id);
+        if (filmIndex !== -1) {sourceImage = require("../Images/ic_favorite.png");}
+        return (<Image source = {sourceImage} style = {styles.favorite_image}/>);
     }
     _displayFilm(){
         if (this.state.film != undefined) {
@@ -52,8 +66,15 @@ class FilmDetails extends React.Component {
                         />    
                     </View>
                     <View style ={styles.content_container}>
-                    <Text style = {styles.title}>{this.state.film.title}</Text>
-                    
+                        <Text style = {styles.title}>{this.state.film.title}</Text>
+
+                        <TouchableOpacity 
+                            style = {styles.favorite_container}
+                            onPress = {() => this._toggleFavorite()} 
+                        >
+                            {this._displayFavoriteImages()}
+                        </TouchableOpacity>
+                        
                         <Text style = {styles.overview_text}>
                             {this.state.film.overview}
                         </Text>
@@ -89,13 +110,13 @@ class FilmDetails extends React.Component {
     // RENDER
     render() {
         console.log("Render");
-        console.log(this.props);
         return (
             <View style = {styles.main_container}>
                 {this._displayLoading()}
                 {this._displayFilm()}
             </View>
         )
+        
     }
 }
 // STYLES 
@@ -124,7 +145,7 @@ const styles = StyleSheet.create({
     },
 
     content_container: {
-        marginTop: 20,
+        marginTop: 10,
         marginBottom: 20
         
     },
@@ -132,19 +153,31 @@ const styles = StyleSheet.create({
         fontSize : 28,
         fontWeight: 'bold',
         textAlign : 'center',
-        marginBottom: 10
+        marginBottom: 5
     },
+    favorite_container: {
+        alignItems: 'center',
+    },
+    favorite_image: {
+        width: 40,
+        height: 40
+    },
+
     overview_text: {
+        marginTop: 10,
         paddingLeft: 5
     },
     details_text : {
         fontWeight : 'bold',
         paddingLeft: 5 
     }
+
 });
 
 // REDUX
 const mapStateToProps = (state) => {
-    return state
+    return {
+        favoritesFilm: state.favoritesFilm
+    }
 }
 export default connect(mapStateToProps)(FilmDetails);
