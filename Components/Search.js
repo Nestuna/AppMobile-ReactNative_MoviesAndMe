@@ -4,31 +4,28 @@ import React from 'react';
 import {
     StyleSheet, View, TextInput, Button, Text, FlatList, ActivityIndicator
 } from 'react-native';
-import FilmItem from './FilmItem'
-import {getFilmsFromApiWithSearchedText} from '../API/TMBDApi'
 import { connect } from 'react-redux';
 
+import {getFilmsFromApiWithSearchedText} from '../API/TMBDApi';
+import ListFilms from './ListFilms';
 
 class Search extends React.Component {
 
     constructor(props) {
         super(props);
-        this.page = 0
-        this.totalPages = 0
+        this.searchedText = "";
+        this.page = 0;
+        this.totalPages = 0;
         this.state = {
             films : [],
-            searchedText : "",
             isLoading: false,
         };
+        this._loadFilms = this._loadFilms.bind(this);
     }
     componentDidMount() {
         console.log("Props:" + this.props);
     }
-    // NAVIGATION
-    _displayDetailForFilm = (idFilm) => {
-        console.log("Display film with id : " + idFilm);
-        this.props.navigation.navigate('Détails du Film', {idFilm : idFilm});
-    }
+    
 
     // STATE 
     _searchFilms() {
@@ -44,10 +41,11 @@ class Search extends React.Component {
         this._loadFilms()
     }
     _loadFilms() {
-        let text = this.state.searchedText;
+        let text = this.searchedText;
         console.log("Searched Text: " + text);
+
         this.setState({isLoading: true});
-        if (this.state.searchedText.length > 0) {
+        if (this.searchedText.length > 0) {
             getFilmsFromApiWithSearchedText(text, this.page + 1).then((data) => {
                 // console.log(data);
                 this.page = data.page
@@ -62,7 +60,7 @@ class Search extends React.Component {
         }
     }
     _searchTextInputChanged(text) {
-        this.state.searchedText = text;
+        this.searchedText = text;
     }
     _displayLoading() {
         if (this.state.isLoading) {
@@ -74,12 +72,8 @@ class Search extends React.Component {
         }
     }
 
-    // STATE REDUX
-    _isFavorite(item) {
-        let isFavorite = 
-        (this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false;
-        return isFavorite
-    }
+
+
     // RENDER
     render() {
         // console.log(this.props.navigation);
@@ -95,25 +89,19 @@ class Search extends React.Component {
                     onSubmitEditing= {() => this._searchFilms()}
                 />
                 <Button title="Rechercher" onPress={() => this._searchFilms()}/>
-                <FlatList 
-                    data = {this.state.films}
-                    extraDate = {this.props.favoritesFilm}
-                    keyExtractor = {(item) => item.id.toString()}
-                    renderItem = {
-                        ({item}) => 
-                        <FilmItem film={item} 
-                        displayDetailForFilm = {this._displayDetailForFilm}
-                        isFavorite = {this._isFavorite(item)} />
-                    }
-                    onEndReachedThreshold = {0.5}
-                    onEndReached = {() => {
-                        console.log("onReachedEnd !")
-                        if (this.page < this.totalPages) {this._loadFilms()}
-                    }}
+
+                <ListFilms 
+                    films = {this.state.films}
+                    navigation = {this.props.navigation}
+                    loadFilms = {this._loadFilms}
+                    page = {this.page}
+                    totalPages = {this.totalPages}
+                    favoriteList = {false}
                 />
                 {this._displayLoading()}
             </View>     
-        )
+           
+        );
     }
 }
 
