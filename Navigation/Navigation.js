@@ -10,7 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Favorites from  '../Components/Favorites';
 import Search from '../Components/Search';
 import FilmDetails from '../Components/FilmDetails';
-import Test from '../Components/Test';
+import FilmVu from '../Components/FilmVu';
 import { StackActions } from 'react-navigation';
 
 function SearchScreen({navigation}) {
@@ -59,16 +59,25 @@ function FavoritesTab({navigation}) {
         </StackFav.Navigator>
     );
 }
-function TestTab(navigation) {
+
+function FilmVuScreen({navigation}) {
     return (
-        <Test
-        name="Test"
-        component = {
-            <Test navigation = {navigation}
-        title = "Test"
-        />
-        }
-        />
+        <FilmVu navigation = {navigation} />
+    );
+}
+function FilmVuTab({navigation}) {
+    const StackFilmVu = createStackNavigator();
+    return (
+        <StackFilmVu.Navigator>
+            <StackFilmVu.Screen
+                name = "Films Vus"
+                component={FilmVuScreen}
+            />
+            <StackFilmVu.Screen
+                name = "Détails du Film"
+                component = {FilmDetailsScreen}
+            />
+        </StackFilmVu.Navigator>
     );
 }
 const Tab = createBottomTabNavigator();
@@ -89,8 +98,8 @@ export default class Navigation extends React.Component {
                                 else if (route.name == 'Favorites') {
                                    iconName = require("../Images/ic_favorite.png") 
                                 }
-                                else {
-                                    return (<Text>Test</Text>);
+                                else if(route.name='Films Vus') {
+                                    iconName = require("../Images/ic_films_vu.png");
                                 }
                                 return (<Image source ={iconName} style={styles.tab_icon} />)
                             }
@@ -106,7 +115,7 @@ export default class Navigation extends React.Component {
                 >
                     <Tab.Screen name="Search" component={SearchTab} />
                     <Tab.Screen name="Favorites" component={FavoritesTab} />
-                    <Tab.Screen name="Test" component={TestTab} />
+                    <Tab.Screen name="Films Vus" component={FilmVuTab} />
                 </Tab.Navigator>
             </NavigationContainer>
     

@@ -11,17 +11,20 @@ class FadeIn extends React.Component {
         };
     }
     componentDidMount() {
-        this.setState(
+        Animated.spring(
+            this.state.leftPosition,
             {
-                leftPosition: 0
+                toValue:0
             }
         ).start();
     }
+
+    // RENDER
     render(){
         return(
-            <Animated style = {{left: this.state.leftPosition}}>
+            <Animated.View style = {{left: this.state.leftPosition}}>
                 {this.props.children}
-            </Animated> 
+            </Animated.View> 
         );
     }
 }
