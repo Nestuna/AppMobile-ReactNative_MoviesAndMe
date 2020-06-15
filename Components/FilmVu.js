@@ -5,16 +5,17 @@ import { connect } from 'react-redux';
 
 import ListFilms from './ListFilms';
 
-class Favorites extends React.Component {
+class FilmVu extends React.Component {
 
     render(){
-        
+        console.log("Films Vus: " + this.props.filmsVus);
         return(
             <View style = {styles.main_container}>
                 <ListFilms 
-                    films = {this.props.favoritesFilm}
+                    films = {this.props.filmsVus}
                     navigation = {this.props.navigation}
-                    favoriteListe = {true}
+                    favoriteListe = {false}
+                    filmsVusList = {true}
                 />
             </View>
             );
@@ -35,8 +36,10 @@ const styles = StyleSheet.create({
 
 // REDUX
 const mapStateToProps = (state) => {
-    return {
-        favoritesFilm: state.favoritesFilm
-    }
-}
-export default connect(mapStateToProps)(Favorites);
+  return {
+	 favoritesFilm: state.toggleFavorite.favoritesFilm,
+	 filmsVus: state.toggleFilmVu.filmsVus
+  };
+};
+
+export default connect(mapStateToProps)(FilmVu);

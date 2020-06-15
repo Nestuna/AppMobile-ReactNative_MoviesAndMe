@@ -33,10 +33,13 @@ const styles = StyleSheet.create({
     }
 });
 
+
 // REDUX
 const mapStateToProps = (state) => {
     return {
-        favoritesFilm: state.favoritesFilm
-    }
-}
+       favoritesFilm: state.toggleFavorite.favoritesFilm,
+       filmsVus: state.toggleFilmVu.filmsVus
+    };
+  };
+
 export default connect(mapStateToProps)(Favorites);

@@ -97,6 +97,7 @@ class Search extends React.Component {
                     page = {this.page}
                     totalPages = {this.totalPages}
                     favoriteList = {false}
+                    filmsVusList = {false}
                 />
                 {this._displayLoading()}
             </View>     
@@ -132,11 +133,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     }
 })
+
 // REDUX
 const mapStateToProps = (state) => {
     return {
-        favoritesFilm: state.favoritesFilm
-    }
-}
+       favoritesFilm: state.toggleFavorite.favoritesFilm,
+       filmsVus: state.toggleFilmVu.filmsVus
+    };
+  };
 export default connect(mapStateToProps)(Search);
 

@@ -57,8 +57,23 @@ class FilmDetails extends React.Component {
     }
   }
   _toggleFavorite() {
-    const action = { type: "TOGGLE_FAVORITE", value: this.state.film };
+	 const action = { type: "TOGGLE_FAVORITE", value: this.state.film };
     this.props.dispatch(action);
+  }
+  _toggleFilmVu() {
+		const action = { type: "TOGGLE_FILMVU", value: this.state.film };
+		this.props.dispatch(action);
+  }
+  _displayFilmVuText() {
+		let text = "Marquer comme vu";
+		const filmIndex = this.props.filmsVus.findIndex(
+			(item) => item.id === this.state.film.id
+		);  
+		if (filmIndex !== -1) {
+			text = "Marquer comme non vu";
+		}
+
+		return text;
   }
   _displayFavoriteImages() {
     let sourceImage = require("../Images/ic_favorite_border.png");
@@ -103,8 +118,11 @@ class FilmDetails extends React.Component {
 
   _displayFilm() {
     if (this.state.film != undefined) {
-      console.log("Display Film");
-      return (
+		console.log("Display Film");
+		console.log("Films Vus:" + this.props.filmsVus)
+		console.log("Films favoris:" + this.props.favoritesFilm)
+
+		return (
         <View style={styles.scrollview_container}>
 				<View style={styles.header_container}>
 					<Image
@@ -154,6 +172,9 @@ class FilmDetails extends React.Component {
 						.join(" / ")}
 					</Text>
           	</View>
+				<Button 
+					title = {this._displayFilmVuText()} 
+					onPress = {() => this._toggleFilmVu()} />
        	</View>
       );
     }
@@ -237,7 +258,8 @@ image_share_touchable: {
 // REDUX
 const mapStateToProps = (state) => {
   return {
-    favoritesFilm: state.favoritesFilm,
+	 favoritesFilm: state.toggleFavorite.favoritesFilm,
+	 filmsVus: state.toggleFilmVu.filmsVus
   };
 };
 export default connect(mapStateToProps)(FilmDetails);

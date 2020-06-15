@@ -27,6 +27,11 @@ class ListFilms extends React.Component {
         (this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false;
         return isFavorite
     }
+    _isVu(item) {
+        let isVu = 
+        (this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false;
+        return isVu;
+    }
     
 
 
@@ -41,22 +46,26 @@ class ListFilms extends React.Component {
                 ({item}) => 
                 <FilmItem film={item} 
                     displayDetailForFilm = {this._displayDetailForFilm}
-                    isFavorite = {this._isFavorite(item)} />
+                    isFavorite = {this._isFavorite(item)} 
+                    isVu = {this._isVu(item)}/>
             }
             onEndReachedThreshold = {0.5}
             onEndReached = {() => {
                 console.log("onReachedEnd !")
-                if (!this.props.favoriteList && this.props.page < this.props.totalPages) {this.props.loadFilms()}
+                if (!this.props.favoriteList && this.props.page < this.props.totalPages
+                    && !this.props.filmsVusList) {this.props.loadFilms()}
             }}
             />
         );
     }
 }
 
-//REDUX
+// REDUX
 const mapStateToProps = (state) => {
     return {
-        favoritesFilm: state.favoritesFilm
-    }
-}
+       favoritesFilm: state.toggleFavorite.favoritesFilm,
+       filmsVus: state.toggleFilmVu.filmsVus
+    };
+  };
+
 export default connect(mapStateToProps)(ListFilms)
